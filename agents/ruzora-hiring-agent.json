@@ -1,0 +1,213 @@
+{
+  "protocolVersion": "1.0",
+  "name": "Ruzora Hiring Agent",
+  "description": "Ruzora connects US companies with vetted senior software engineers in Latin America. Agents can browse blind profiles of vetted engineers, verify a Ruzora Vetted badge, request a vetted shortlist (within 72 hours), check fit for a hiring quote, send a candidate Ruzora's coding challenge and track a coding challenge's status. Profiles stay blind until a service agreement is signed. Read skills are open; skills that send data need a verified work email (verify_work_email, then confirm_work_email, then \"Authorization: Bearer <buyer_token>\"). Tasks complete synchronously; a refused task says the next step in its status message.",
+  "url": "https://mcp.ruzora.com/a2a",
+  "version": "1.0.0",
+  "capabilities": {
+    "streaming": false,
+    "pushNotifications": false
+  },
+  "skills": [
+    {
+      "id": "search_vetted_engineers",
+      "name": "Search Ruzora's Vetted Engineers",
+      "description": "See blind profiles of senior engineers in Latin America who already passed Ruzora's coding and interview vetting and are available now, filtered by stack, level and US-hours overlap. Call it with SendMessage: one data part {\"skill\": \"<id>\", \"input\": {...}} (mediaType application/json); the input fields are in the card extension https://www.ruzora.com/a2a/extensions/skill-input-schema/v1.",
+      "tags": [
+        "hiring",
+        "engineers",
+        "bench",
+        "blind-profiles",
+        "latin-america"
+      ],
+      "examples": [
+        "{\"skill\":\"search_vetted_engineers\",\"input\":{\"stack\":[\"Python\",\"Postgres\"],\"level\":\"Senior\"}}"
+      ],
+      "inputModes": [
+        "application/json"
+      ],
+      "outputModes": [
+        "text/plain",
+        "text/markdown",
+        "application/json"
+      ]
+    },
+    {
+      "id": "verify_ruzora_badge",
+      "name": "Verify a Ruzora Vetted Badge",
+      "description": "Check that a candidate's \"Ruzora Vetted\" badge is real and current, which stacks it covers, and when the vetting happened. Pass the badge ID or badge URL. Call it with SendMessage: one data part {\"skill\": \"<id>\", \"input\": {...}} (mediaType application/json); the input fields are in the card extension https://www.ruzora.com/a2a/extensions/skill-input-schema/v1.",
+      "tags": [
+        "hiring",
+        "verification",
+        "badge"
+      ],
+      "examples": [
+        "{\"skill\":\"verify_ruzora_badge\",\"input\":{\"badge\":\"<the badge link exactly as the candidate shared it>\"}}"
+      ],
+      "inputModes": [
+        "application/json"
+      ],
+      "outputModes": [
+        "text/plain",
+        "text/markdown",
+        "application/json"
+      ]
+    },
+    {
+      "id": "get_vetting_status",
+      "name": "Check a Ruzora Vetting Request",
+      "description": "Check progress on a coding challenge you sent through Ruzora: not started, in progress, finished, or expired, and scores once the report is delivered. Pass the status page URL. Call it with SendMessage: one data part {\"skill\": \"<id>\", \"input\": {...}} (mediaType application/json); the input fields are in the card extension https://www.ruzora.com/a2a/extensions/skill-input-schema/v1.",
+      "tags": [
+        "hiring",
+        "coding-challenge",
+        "status"
+      ],
+      "examples": [
+        "{\"skill\":\"get_vetting_status\",\"input\":{\"status_url\":\"https://www.ruzora.com/vetting/status/<token>\"}}"
+      ],
+      "inputModes": [
+        "application/json"
+      ],
+      "outputModes": [
+        "text/plain",
+        "text/markdown",
+        "application/json"
+      ]
+    },
+    {
+      "id": "verify_work_email",
+      "name": "Verify a Work Email",
+      "description": "Step 1 before a Ruzora action that needs a verified buyer: emails the user a 6-digit code and a confirm link. The user reads the code back; confirm_work_email takes it. Sends the email address to Ruzora. Call it with SendMessage: one data part {\"skill\": \"<id>\", \"input\": {...}} (mediaType application/json); the input fields are in the card extension https://www.ruzora.com/a2a/extensions/skill-input-schema/v1.",
+      "tags": [
+        "auth",
+        "work-email"
+      ],
+      "examples": [
+        "{\"skill\":\"verify_work_email\",\"input\":{\"work_email\":\"cto@yourcompany.com\",\"for_tool\":\"request_vetted_shortlist\"}}"
+      ],
+      "inputModes": [
+        "application/json"
+      ],
+      "outputModes": [
+        "text/plain",
+        "text/markdown",
+        "application/json"
+      ]
+    },
+    {
+      "id": "confirm_work_email",
+      "name": "Confirm a Work Email",
+      "description": "Step 2: the 6-digit code the user read from the email, with the verification_id from verify_work_email (or the verification_id alone once they clicked the link), becomes a buyer_token for verified Ruzora actions, valid 7 days, and opens their Sol account. Sends the email and code to Ruzora. Call it with SendMessage: one data part {\"skill\": \"<id>\", \"input\": {...}} (mediaType application/json); the input fields are in the card extension https://www.ruzora.com/a2a/extensions/skill-input-schema/v1.",
+      "tags": [
+        "auth",
+        "work-email"
+      ],
+      "examples": [
+        "{\"skill\":\"confirm_work_email\",\"input\":{\"work_email\":\"cto@yourcompany.com\",\"code\":\"123456\",\"verification_id\":\"<from verify_work_email>\"}}"
+      ],
+      "inputModes": [
+        "application/json"
+      ],
+      "outputModes": [
+        "text/plain",
+        "text/markdown",
+        "application/json"
+      ]
+    },
+    {
+      "id": "request_vetted_shortlist",
+      "name": "Request a Vetted Engineer Shortlist",
+      "description": "Ask Ruzora for a shortlist of vetted senior engineers in Latin America for a role (ideally from a role scorecard). A vetted shortlist within 72 hours; profiles are blind until an agreement is signed. Needs a work email. Sends the name, email and company given to Ruzora. Needs a verified work email: send \"Authorization: Bearer <buyer_token>\" (from verify_work_email then confirm_work_email). Call it with SendMessage: one data part {\"skill\": \"<id>\", \"input\": {...}} (mediaType application/json); the input fields are in the card extension https://www.ruzora.com/a2a/extensions/skill-input-schema/v1.",
+      "tags": [
+        "hiring",
+        "shortlist",
+        "engineers"
+      ],
+      "examples": [
+        "{\"skill\":\"request_vetted_shortlist\",\"input\":{\"full_name\":\"Alex Kim\",\"work_email\":\"cto@yourcompany.com\",\"company\":\"Your Company\",\"role\":\"Senior backend engineer\",\"seniority\":\"senior\",\"required_skills\":[\"Python\",\"Postgres\"]}}"
+      ],
+      "inputModes": [
+        "application/json"
+      ],
+      "outputModes": [
+        "text/plain",
+        "text/markdown",
+        "application/json"
+      ]
+    },
+    {
+      "id": "check_hiring_fit",
+      "name": "Check Fit for a Hiring Quote",
+      "description": "Answer Ruzora's 5 quick questions (roles, runway, budget per engineer, timing) to see whether a quote makes sense and the next step to it: usually a 15-minute call with the founder. Explains the flat monthly pricing; no price list. Sends the name, email and company given to Ruzora. Needs a verified work email: send \"Authorization: Bearer <buyer_token>\" (from verify_work_email then confirm_work_email). Call it with SendMessage: one data part {\"skill\": \"<id>\", \"input\": {...}} (mediaType application/json); the input fields are in the card extension https://www.ruzora.com/a2a/extensions/skill-input-schema/v1.",
+      "tags": [
+        "hiring",
+        "pricing",
+        "fit"
+      ],
+      "examples": [
+        "{\"skill\":\"check_hiring_fit\",\"input\":{\"full_name\":\"Alex Kim\",\"work_email\":\"cto@yourcompany.com\",\"your_title\":\"cto_vp_eng\",\"role_count\":\"one\",\"runway\":\"12_18mo\",\"seat_budget\":\"6000_7999\",\"timing\":\"within_month\"}}"
+      ],
+      "inputModes": [
+        "application/json"
+      ],
+      "outputModes": [
+        "text/plain",
+        "text/markdown",
+        "application/json"
+      ]
+    },
+    {
+      "id": "send_coding_challenge",
+      "name": "Send a Candidate the Ruzora Coding Challenge",
+      "description": "Runs Ruzora's coding challenge + technical questions (~25 min, free) on a candidate the user found; returns a candidate link and a status link. Needs the user's confirmation that the candidate knows. Sends both names, the email, company and profile links to Ruzora. Needs a verified work email: send \"Authorization: Bearer <buyer_token>\" (from verify_work_email then confirm_work_email). Call it with SendMessage: one data part {\"skill\": \"<id>\", \"input\": {...}} (mediaType application/json); the input fields are in the card extension https://www.ruzora.com/a2a/extensions/skill-input-schema/v1.",
+      "tags": [
+        "hiring",
+        "coding-challenge",
+        "assessment"
+      ],
+      "examples": [
+        "{\"skill\":\"send_coding_challenge\",\"input\":{\"requester_name\":\"Alex Kim\",\"work_email\":\"cto@yourcompany.com\",\"company\":\"Your Company\",\"role\":\"Senior backend engineer\",\"candidate_name\":\"Candidate Name\",\"candidate_informed\":true}}"
+      ],
+      "inputModes": [
+        "application/json"
+      ],
+      "outputModes": [
+        "text/plain",
+        "text/markdown",
+        "application/json"
+      ]
+    }
+  ],
+  "defaultInputModes": [
+    "application/json"
+  ],
+  "defaultOutputModes": [
+    "text/plain",
+    "text/markdown",
+    "application/json"
+  ],
+  "provider": {
+    "organization": "Ruzora",
+    "url": "https://www.ruzora.com"
+  },
+  "documentationUrl": "https://www.ruzora.com/developers/mcp",
+  "iconUrl": "https://www.ruzora.com/ruzora_logo.png",
+  "author": "Ruzora LLC",
+  "wellKnownURI": "https://www.ruzora.com/.well-known/agent-card.json",
+  "homepage": "https://www.ruzora.com",
+  "pricing": {
+    "model": "free",
+    "details": "Agent calls are free. Discovery skills need no auth; buyer actions need a Ruzora buyer token from verify_work_email then confirm_work_email. Endpoint speaks A2A 1.0 only (JSON-RPC, header A2A-Version: 1.0; SendMessage/GetTask/ListTasks/CancelTask)."
+  },
+  "contact": {
+    "support": "https://www.ruzora.com/support"
+  },
+  "registryTags": [
+    "hiring",
+    "recruiting",
+    "software-engineers",
+    "latin-america",
+    "staff-augmentation",
+    "hr"
+  ]
+}
